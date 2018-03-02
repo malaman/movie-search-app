@@ -12,4 +12,5 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	log.Println(os.Getenv("API_HOST"))
+	StartRouter()
 }
