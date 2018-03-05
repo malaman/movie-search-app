@@ -1,16 +1,10 @@
 package main
 
-import (
-	"github.com/joho/godotenv"
-	"log"
-	"os"
+import (	
+	"github.com/malaman/movie-search-app/backend/utils"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-	log.Println(os.Getenv("API_HOST"))
+	utils.LoadEnvVariables()
 	StartRouter()
 }

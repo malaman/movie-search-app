@@ -11,3 +11,7 @@ type SearchResponse struct {
 	TotalResults string `json:"totalResults"`
 	Response     string `json:"Response"`
 }
+
+type QueryParams struct {
+	Search string 
+}
