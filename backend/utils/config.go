@@ -9,10 +9,10 @@ import (
 var ApiHost string
 var ApiKey string
 
-func LoadEnvVariables() {	
+func LoadEnvVariables() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
-    ApiHost = os.Getenv("API_HOST")
-    ApiKey = os.Getenv("API_KEY")
+	ApiHost = os.Getenv("API_HOST")
+	ApiKey = os.Getenv("API_KEY")
 }

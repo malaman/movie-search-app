@@ -1,20 +1,20 @@
 package http
 
-import (	
+import (
 	"github.com/valyala/fasthttp"
+	"io/ioutil"
 	"net/http"
-	 "io/ioutil"
 )
 
-func Get(url string) (string, error) {
-	if response, err := http.Get(url);	err != nil {
-		return "", err
+func Get(url string) ([]byte, error) {
+	if response, err := http.Get(url); err != nil {
+		return []byte{}, err
 	} else {
 		defer response.Body.Close()
 		if content, err := ioutil.ReadAll(response.Body); err != nil {
-			return "", err				
+			return []byte{}, err
 		} else {
-			return string(content), nil
+			return content, nil
 		}
 	}
 }
