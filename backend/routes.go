@@ -14,7 +14,7 @@ func Search(ctx *fasthttp.RequestCtx) {
 		ctx.Error(fasthttp.StatusMessage(fasthttp.StatusNotFound), fasthttp.StatusNotFound)
 		fmt.Fprintf(ctx, "Error")
 	} else {
-		fmt.Fprintf(ctx, string(*result))
+		fmt.Fprintf(ctx, string(result))
 	}
 }
 

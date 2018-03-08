@@ -10,7 +10,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-func ParseHttpArgs(args *fasthttp.Args) (*models.QueryParams, error) {
+func parseHttpArgs(args *fasthttp.Args) (*models.QueryParams, error) {
 	searchParam := string(args.Peek("s"))
 	if len(searchParam) == 0 {
 		return nil, errors.New("s query param is not found")
@@ -18,23 +18,32 @@ func ParseHttpArgs(args *fasthttp.Args) (*models.QueryParams, error) {
 	return &models.QueryParams{searchParam}, nil
 }
 
-func GetMovieSearchResult(ctx *fasthttp.RequestCtx) (*[]byte, error) {
+func getSearchResultItemsFromBytes(bytes *[]byte) ([]models.SearchResultItem, error) {
+	searchResponse := models.SearchResponse{}
+	emptyResponse := []models.SearchResultItem{}
+	if err := json.Unmarshal(*bytes, &searchResponse); err != nil {
+		return emptyResponse, err
+	} else {
+		return searchResponse.Search, nil
+	}
+}
+
+func GetMovieSearchResult(ctx *fasthttp.RequestCtx) ([]byte, error) {
 	emptyResponse := []byte{}
-	if s, err := ParseHttpArgs(ctx.QueryArgs()); err != nil {
-		return &emptyResponse, err
+	if s, err := parseHttpArgs(ctx.QueryArgs()); err != nil {
+		return emptyResponse, err
 	} else {
 		url := fmt.Sprintf("%s?apikey=%s&s=%s", utils.ApiHost, utils.ApiKey, s.Search)
 		if result, err := http.Get(url); err != nil {
-			return &emptyResponse, err
+			return emptyResponse, err
 		} else {
-			searchResponse := models.SearchResponse{}
-			if err := json.Unmarshal(result, &searchResponse); err != nil {
-				return &emptyResponse, err
+			if searchResultItems, err := getSearchResultItemsFromBytes(&result); err != nil {
+				return emptyResponse, err
 			} else {
-				if response, err := json.Marshal(searchResponse.Search); err != nil {
-					return &emptyResponse, err
+				if response, err := json.Marshal(searchResultItems); err != nil {
+					return emptyResponse, err
 				} else {
-					return &response, nil
+					return response, nil
 				}
 			}
 		}
