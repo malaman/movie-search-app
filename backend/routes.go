@@ -1,25 +1,29 @@
 package main
 
 import (
-	"fmt"
-	"github.com/buaazp/fasthttprouter"
 	"github.com/malaman/movie-search-app/backend/services"
-	"github.com/valyala/fasthttp"
+	"github.com/rs/cors"
 	"log"
+	"net/http"
 )
 
-func Search(ctx *fasthttp.RequestCtx) {
-	if result, err := services.GetMovieSearchResult(ctx); err != nil {
+func Search(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query()
+	if result, err := services.GetMovieSearchResult(query); err != nil {
 		log.Println(err)
-		ctx.Error(fasthttp.StatusMessage(fasthttp.StatusNotFound), fasthttp.StatusNotFound)
-		fmt.Fprintf(ctx, "Error")
+		w.WriteHeader(http.StatusNotFound)
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte("{\"error\": \"No result\"}"))
 	} else {
-		fmt.Fprintf(ctx, string(result))
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(result)
 	}
 }
 
 func StartRouter() {
-	router := fasthttprouter.New()
-	router.GET("/search", Search)
-	log.Fatal(fasthttp.ListenAndServe(":9000", router.Handler))
+	mux := http.NewServeMux()
+	mux.HandleFunc("/search", Search)
+	handler := cors.Default().Handler(mux)
+	log.Println("Starting a server on port :9000")
+	log.Fatal(http.ListenAndServe(":9000", handler))
 }

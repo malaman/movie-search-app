@@ -7,15 +7,14 @@ import (
 	"github.com/malaman/movie-search-app/backend/http"
 	"github.com/malaman/movie-search-app/backend/models"
 	"github.com/malaman/movie-search-app/backend/utils"
-	"github.com/valyala/fasthttp"
 )
 
-func parseHttpArgs(args *fasthttp.Args) (*models.QueryParams, error) {
-	searchParam := string(args.Peek("s"))
-	if len(searchParam) == 0 {
-		return nil, errors.New("s query param is not found")
+func parseHttpArgs(query map[string][]string) (*models.QueryParams, error) {
+	searchParam := query["s"]
+	if len(searchParam) > 0 {
+		return &models.QueryParams{searchParam[0]}, nil
 	}
-	return &models.QueryParams{searchParam}, nil
+	return nil, errors.New("s query param is not found")
 }
 
 func getSearchResultItemsFromBytes(bytes *[]byte) ([]models.SearchResultItem, error) {
@@ -28,9 +27,9 @@ func getSearchResultItemsFromBytes(bytes *[]byte) ([]models.SearchResultItem, er
 	}
 }
 
-func GetMovieSearchResult(ctx *fasthttp.RequestCtx) ([]byte, error) {
+func GetMovieSearchResult(query map[string][]string) ([]byte, error) {
 	emptyResponse := []byte{}
-	if s, err := parseHttpArgs(ctx.QueryArgs()); err != nil {
+	if s, err := parseHttpArgs(query); err != nil {
 		return emptyResponse, err
 	} else {
 		url := fmt.Sprintf("%s?apikey=%s&s=%s", utils.ApiHost, utils.ApiKey, s.Search)

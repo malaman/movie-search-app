@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/buaazp/fasthttprouter"
-  packages = ["."]
-  revision = "ade4e2031af3aed7fffd241084aad80a58faf421"
-  version = "v0.1.1"
-
-[[projects]]
   name = "github.com/joho/godotenv"
   packages = ["."]
   revision = "a79fa1e548e2c689c241d10173efd51e5d689d5b"
@@ -36,6 +30,12 @@
   version = "v1.1"
 
 [[projects]]
+  name = "github.com/rs/cors"
+  packages = ["."]
+  revision = "feef513b9575b32f84bafa580aad89b011259019"
+  version = "v1.3.0"
+
+[[projects]]
   name = "github.com/valyala/fasthttp"
   packages = [
     ".",
@@ -47,6 +47,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "baf5dd31009861fa02cf3a6c79cccab95cdb585b9e15b475b94a0a935849b4e4"
+  inputs-digest = "761c5938f02572870110771ac75a2b29f0201d07e3272ca0dd40cc4635a64159"
   solver-name = "gps-cdcl"
   solver-version = 1
