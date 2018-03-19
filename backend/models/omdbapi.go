@@ -1,6 +1,9 @@
 package models
 
-type SearchResultItem struct {
+// omdbapi does not allow to specify custom limit per page
+const OMDB_ITEMS_PER_PAGE = 10
+
+type OMDBSearchResultItem struct {
 	Title  string `json:"Title"`
 	Year   string `json:"Year"`
 	ImdbID string `json:"imdbID"`
@@ -8,12 +11,13 @@ type SearchResultItem struct {
 	Poster string `json:"Poster"`
 }
 
-type SearchResponse struct {
-	Search       []SearchResultItem `json:"Search"`
-	TotalResults string             `json:"totalResults"`
-	Response     string             `json:"Response"`
+type OMDBSearchResponse struct {
+	Search       []OMDBSearchResultItem `json:"Search"`
+	TotalResults string                 `json:"totalResults"`
+	Response     string                 `json:"Response"`
 }
 
-type QueryParams struct {
+type OMDBSearchQueryParams struct {
 	Search string
+	Page   int
 }

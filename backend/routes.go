@@ -1,11 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"github.com/malaman/movie-search-app/backend/services"
 	"github.com/rs/cors"
 	"log"
 	"net/http"
 )
+
+const SEARCH_ROUTE = "search"
 
 func Search(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
@@ -22,7 +25,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 
 func StartRouter() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/search", Search)
+	mux.HandleFunc(fmt.Sprintf("/%s", SEARCH_ROUTE), Search)
 	handler := cors.Default().Handler(mux)
 	log.Println("Starting a server on port :9000")
 	log.Fatal(http.ListenAndServe(":9000", handler))
