@@ -5,6 +5,7 @@ import react.*
 import react.dom.*
 import utils.axios
 import utils.AxiosConfigSettings
+import models.SearchResponse
 
 class Main : RComponent<RProps, RState>() {
 
@@ -13,8 +14,8 @@ class Main : RComponent<RProps, RState>() {
             url = "http://localhost:9000/search?s=lord"
             timeout = 3000
         }
-        axios<Any>(config).then { response ->
-            println(response.data)
+        axios<SearchResponse>(config).then { response ->
+            println(response.data.results[0].Title)
         }
     }
 

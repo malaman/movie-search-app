@@ -3,7 +3,7 @@ package models
 type SearchResponse struct {
 	Results      []OMDBSearchResultItem `json:"results"`
 	TotalResults string                 `json:"totalResults"`
-	NextLink     string                 `json:"nextLink"`
+	NextPage     string                 `json:"nextPage"`
 }
 
 type SearchQueryParms struct {

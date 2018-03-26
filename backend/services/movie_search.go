@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
+
 	"github.com/malaman/movie-search-app/backend/http"
 	"github.com/malaman/movie-search-app/backend/models"
 	"github.com/malaman/movie-search-app/backend/utils"
-	"strconv"
 )
 
 func parseHttpArgs(query map[string][]string) (*models.OMDBSearchQueryParams, error) {
@@ -33,14 +34,12 @@ func parseHttpArgs(query map[string][]string) (*models.OMDBSearchQueryParams, er
 	return &result, nil
 }
 
-func getSearchResultItemsFromBytes(bytes *[]byte) ([]models.OMDBSearchResultItem, error) {
+func getSearchResultItemsFromBytes(bytes *[]byte) (models.OMDBSearchResponse, error) {
 	searchResponse := models.OMDBSearchResponse{}
-	emptyResponse := []models.OMDBSearchResultItem{}
 	if err := json.Unmarshal(*bytes, &searchResponse); err != nil {
-		return emptyResponse, err
-	} else {
-		return searchResponse.Search, nil
+		return models.OMDBSearchResponse{}, err
 	}
+	return searchResponse, nil
 }
 
 /*
@@ -52,12 +51,15 @@ func getNextLink(totalResults int, currentQuery models.OMDBSearchQueryParams) {
 
 }
 
-
-func transformOMDBSearchResponse(result models.OMDBSearchResult) models.SearchResponse {
-	emptyResponse := models.SearchResponse{}
-
-}
 */
+func transformOMDBSearchResponse(result models.OMDBSearchResponse) models.SearchResponse {
+	response := models.SearchResponse{
+		Results:      result.Search,
+		TotalResults: result.TotalResults,
+		//TODO: add nextpage link calculation here
+		NextPage: ""}
+	return response
+}
 
 func GetMovieSearchResult(query map[string][]string) ([]byte, error) {
 	emptyResponse := []byte{}
@@ -68,10 +70,11 @@ func GetMovieSearchResult(query map[string][]string) ([]byte, error) {
 		if result, err := http.Get(url); err != nil {
 			return emptyResponse, err
 		} else {
-			if searchResultItems, err := getSearchResultItemsFromBytes(&result); err != nil {
+			if searchResponse, err := getSearchResultItemsFromBytes(&result); err != nil {
 				return emptyResponse, err
 			} else {
-				if response, err := json.Marshal(searchResultItems); err != nil {
+				searchResult := transformOMDBSearchResponse(searchResponse)
+				if response, err := json.Marshal(searchResult); err != nil {
 					return emptyResponse, err
 				} else {
 					return response, nil
