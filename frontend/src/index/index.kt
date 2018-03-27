@@ -7,6 +7,7 @@ import kotlin.browser.*
 
 fun main(args: Array<String>) {
     requireAll(require.context("src", true, js("/\\.css$/")))
+    require("react-select/dist/react-select.css")
 
     render(document.getElementById("root")) {
         app()
