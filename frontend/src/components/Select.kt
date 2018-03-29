@@ -14,7 +14,7 @@ external interface Option {
 external interface SelectProps : RProps {
     var name: String
     var options: Array<Option>
-    var value: String
+    var value: String?
     var onInputChange: (String) -> Unit
     var onChange: (Option) -> Unit
     var isLoading: Boolean
@@ -43,7 +43,7 @@ class CustomSelect(props: SelectProps) : RComponent<SelectProps, RState>(props) 
 fun RBuilder.customSelect(
     name: String,
     options: Array<Option>,
-    value: String,
+    value: String?,
     onInputChange: (String) -> Unit, 
     onChange: (Option) -> Unit,
     isLoading: Boolean = false,

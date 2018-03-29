@@ -9,20 +9,41 @@ import models.SearchResponse
 import models.SearchResponseItem
 import components.*
 
-class HomePage : RComponent<RProps, RState>() {
+interface HomePageState : RState {
+    var options: Array<Option>
+    var selectedOption: Option?
+}
+
+class HomePage : RComponent<RProps, HomePageState >() {
 
     companion object {
         const val HOST = "http://localhost:9000"
-
-        fun getSelectOptions(results: Array<SearchResponseItem>): List<Option> {
-            return results.map { item ->
+        /**
+         * Prepares array of options for react select
+         *
+         */
+        fun getSelectOptions(results: Array<SearchResponseItem>, searchString: String): Array<Option> {
+            val result = results.map { item ->
                 val result: Option = jsObject {
                     value = item.imdbID
                     label = item.Title
                 }
                 result
             }
+            if (result.isNotEmpty()) {
+                val lastOption: Option = jsObject {
+                    value = "show_all"
+                    label = "See all results for: $searchString"
+                }
+                return result.plus(lastOption).toTypedArray()
+            }
+            return result.toTypedArray()
         }
+    }
+
+    override fun HomePageState.init(props: RProps) {
+        options = emptyArray()
+        selectedOption = null
     }
 
     private fun loadMovies(searchString: String) {
@@ -34,40 +55,33 @@ class HomePage : RComponent<RProps, RState>() {
             val results = response.data.results
 
             if (results !== null) {
-                val options = getSelectOptions(results)
-                options.forEach { item -> println(JSON.stringify(item)) }
+                val nextOptions = getSelectOptions(results, searchString)
+                if (nextOptions.isNotEmpty()) {
+                }
+                setState {
+                    options = nextOptions
+                }
             }
         }
     }
 
-    private fun onSelectChange(option: Option) {
-        println(option)
+    private fun onSelectChange(option: Option?) {
+        setState {
+            selectedOption = option
+        }
     }
 
     private fun onInputValueChange(value: String) {
         loadMovies(value)
     }
 
-    val options : Array<Option> = arrayOf(
-            jsObject {
-                value = "1"
-                label = "1"
-            },
-            jsObject {
-                value = "2"
-                label = "2"
-            }
-    )
-
-
     override fun RBuilder.render() {
         div {
-            "This is custom component with xhr request"
             customSelect(
                     name="12313",
-                    value="1",
-                    options=options,
-                    onChange={opt: Option -> onSelectChange(opt)},
+                    value=state.selectedOption?.value,
+                    options=state.options,
+                    onChange={opt: Option? -> onSelectChange(opt)},
                     onInputChange = {value: String -> onInputValueChange(value)}
             )
         }
