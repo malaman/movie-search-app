@@ -1,4 +1,5 @@
 package models
+
 external interface SearchResponseItem {
     val Title: String
     val Year: Int
@@ -9,7 +10,7 @@ external interface SearchResponseItem {
 
 }
 external interface SearchResponse {
-    val results: Array<SearchResponseItem>
+    val results: Array<SearchResponseItem>?
     val totalResults: String
     val nextPage: String
 }
