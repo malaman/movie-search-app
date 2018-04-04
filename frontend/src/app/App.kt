@@ -1,34 +1,20 @@
 package app
 
-import kotlinext.js.jsObject
 import react.*
 import react.dom.*
-import pages.homePage
-import utils.UniversalRouter
-import utils.Route
+import components.*
+import pages.HomePage
 
-class App : RComponent<RProps, RState>() {
-
-    override fun componentDidMount() {
-        val routes: Array<Route> = arrayOf(
-                jsObject {
-                    path = "/"
-                    action = { println("hi")}
-                }
-        )
-
-          val router = UniversalRouter(routes, jsObject {})
-            println(router.resolve)
-    }
-
+class RootComponent : RComponent<RProps, RState>() {
     override fun RBuilder.render() {
-        div("container") {
-            div {
-                +"Enter movie title"
+        div("container"){
+            hashRouter {
+                switch {
+                    route("/",  HomePage::class, exact = true)
+                }
             }
-            homePage()
         }
     }
 }
 
-fun RBuilder.app() = child(App::class) {}
+fun RBuilder.app() = child(RootComponent::class) {}
