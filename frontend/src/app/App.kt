@@ -4,6 +4,12 @@ import react.*
 import react.dom.*
 import react.router.dom.*
 import pages.HomePage
+import pages.moviePage
+
+interface MovieIDProps : RProps {
+    var imdbID: String
+}
+
 
 class RootComponent : RComponent<RProps, RState>() {
     override fun RBuilder.render() {
@@ -11,6 +17,9 @@ class RootComponent : RComponent<RProps, RState>() {
             hashRouter {
                 switch {
                     route("/",  HomePage::class, exact = true)
+                    route<MovieIDProps>("/movie/:imdbID") { props ->
+                        moviePage(props.match.params.imdbID)
+                    }
                 }
             }
         }

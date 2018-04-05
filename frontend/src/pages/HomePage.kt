@@ -8,6 +8,7 @@ import utils.AxiosConfigSettings
 import models.SearchResponse
 import models.SearchResponseItem
 import components.*
+import kotlin.browser.window
 
 interface HomePageState : RState {
     var options: Array<Option>
@@ -68,6 +69,9 @@ class HomePage : RComponent<RProps, HomePageState >() {
     private fun onSelectChange(option: Option?) {
         setState {
             selectedOption = option
+        }
+        if (option != null) {
+            window.location.hash = "/movie/${option.value}"
         }
     }
 
