@@ -205,6 +205,7 @@ module.exports = {
         '@jetbrains/kotlin-extensions',
         '@jetbrains/kotlin-react',
         '@jetbrains/kotlin-react-dom',
+        '@jetbrains/kotlin-react-router-dom',
         'kotlinx-html',
       ].map(pkg => require.resolve(pkg)),
     }),

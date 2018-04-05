@@ -2,7 +2,7 @@ package app
 
 import react.*
 import react.dom.*
-import components.*
+import react.router.dom.*
 import pages.HomePage
 
 class RootComponent : RComponent<RProps, RState>() {

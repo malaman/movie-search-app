@@ -16,9 +16,13 @@
   version "16.2.0-pre.20"
   resolved "https://registry.yarnpkg.com/@jetbrains/kotlin-react-dom/-/kotlin-react-dom-16.2.0-pre.20.tgz#71534b815bf54fd7ed7b6949a17b28b1bbaef8f6"
 
-"@jetbrains/kotlin-react@^16.2.0-pre.20":
-  version "16.2.0-pre.20"
-  resolved "https://registry.yarnpkg.com/@jetbrains/kotlin-react/-/kotlin-react-16.2.0-pre.20.tgz#0bf2ee5d54607bb206233d62ee06c79ac53279a4"
+"@jetbrains/kotlin-react-router-dom@^4.2.2-pre.23":
+  version "4.2.2-pre.23"
+  resolved "https://registry.yarnpkg.com/@jetbrains/kotlin-react-router-dom/-/kotlin-react-router-dom-4.2.2-pre.23.tgz#fb27494316eaf6765300022a93859f93b6ea63f3"
+
+"@jetbrains/kotlin-react@^16.2.1-pre.23":
+  version "16.2.1-pre.23"
+  resolved "https://registry.yarnpkg.com/@jetbrains/kotlin-react/-/kotlin-react-16.2.1-pre.23.tgz#d85635e5cc868e1ffa885723278ca495a73caa7a"
 
 "@jetbrains/kotlin-webpack-plugin@^1.2.2":
   version "1.2.2"

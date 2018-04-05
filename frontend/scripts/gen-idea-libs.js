@@ -12,6 +12,7 @@ generate(
     'kotlin-react': require.resolve('@jetbrains/kotlin-react'),
     'kotlin-react-router-dom': require.resolve('@jetbrains/kotlin-react-router-dom'),
     'kotlinx-html-js': require.resolve('@hypnosphi/kotlinx-html-js'),
+    'kotlin-react-router': require.resolve('@jetbrains/kotlin-react-router'),
   },
   paths.projectPath
 );
