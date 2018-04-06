@@ -9,3 +9,7 @@ type SearchResponse struct {
 type SearchQueryParms struct {
 	*OMDBSearchQueryParams
 }
+
+type MovieDetails struct {
+	*OMDBMovieDetails
+}

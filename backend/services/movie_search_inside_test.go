@@ -46,10 +46,10 @@ func TestGetSearchResultItemsFromBytes(t *testing.T) {
 	if result, err := getSearchResultItemsFromBytes(&bytes); err != nil {
 		t.Error("getSearchResultItemsFromBytes is failed")
 	} else {
-		if len(result) != 4 {
+		if len(result.Search) != 4 {
 			t.Error("getSearchResultItemsFromBytes: slice len does not match")
 		}
-		if result[0].Title != "Lord, Give Me Patience" {
+		if result.Search[0].Title != "Lord, Give Me Patience" {
 			t.Error("getSearchResultItemsFromBytes: slice content does not match")
 		}
 	}

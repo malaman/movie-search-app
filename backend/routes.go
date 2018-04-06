@@ -1,32 +1,49 @@
 package main
 
 import (
-	"fmt"
-	"github.com/malaman/movie-search-app/backend/services"
-	"github.com/rs/cors"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	CustomHTTP "github.com/malaman/movie-search-app/backend/http"
+	"github.com/malaman/movie-search-app/backend/services"
+	"github.com/rs/cors"
 )
 
-const SEARCH_ROUTE = "search"
+var client = &CustomHTTP.Client{}
 
-func Search(w http.ResponseWriter, r *http.Request) {
+func search(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
-	if result, err := services.GetMovieSearchResult(query); err != nil {
+	w.Header().Set("Content-Type", "application/json")
+	if result, err := services.GetMovieSearchResult(query, client); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusNotFound)
-		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte("{\"error\": \"No result\"}"))
 	} else {
-		w.Header().Set("Content-Type", "application/json")
 		w.Write(result)
 	}
 }
 
+func details(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	w.Header().Set("Content-Type", "application/json")
+	if result, err := services.GetMovieDetails(params["imdbID"], client); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("{\"error\": \"No result\"}"))
+	} else {
+		w.Write(result)
+	}
+}
+
+//StartRouter - starts mux router
 func StartRouter() {
-	mux := http.NewServeMux()
-	mux.HandleFunc(fmt.Sprintf("/%s", SEARCH_ROUTE), Search)
-	handler := cors.Default().Handler(mux)
+	router := mux.NewRouter()
+
+	router.HandleFunc("/search", search)
+	router.HandleFunc("/movie/{imdbID}", details)
+
+	handler := cors.Default().Handler(router)
 	log.Println("Starting a server on port :9000")
 	log.Fatal(http.ListenAndServe(":9000", handler))
 }

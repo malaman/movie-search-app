@@ -11,6 +11,7 @@ import (
 	"github.com/malaman/movie-search-app/backend/utils"
 )
 
+//TODO: add tests here
 func parseHttpArgs(query map[string][]string) (*models.OMDBSearchQueryParams, error) {
 	result := models.OMDBSearchQueryParams{"", 1}
 	err := false
@@ -61,13 +62,14 @@ func transformOMDBSearchResponse(result models.OMDBSearchResponse) models.Search
 	return response
 }
 
-func GetMovieSearchResult(query map[string][]string) ([]byte, error) {
+//GetMovieSearchResult prepares data for the movies search request
+func GetMovieSearchResult(query map[string][]string, client http.HTTPClient) ([]byte, error) {
 	emptyResponse := []byte{}
 	if s, err := parseHttpArgs(query); err != nil {
 		return emptyResponse, err
 	} else {
 		url := fmt.Sprintf("%s?apikey=%s&s=%s", utils.ApiHost, utils.ApiKey, s.Search)
-		if result, err := http.Get(url); err != nil {
+		if result, err := client.Get(url); err != nil {
 			return emptyResponse, err
 		} else {
 			if searchResponse, err := getSearchResultItemsFromBytes(&result); err != nil {
