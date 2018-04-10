@@ -1,5 +1,8 @@
 package pages
 
+
+import components.movie.title.title
+
 import kotlinext.js.jsObject
 import react.*
 import react.dom.*
@@ -37,8 +40,11 @@ class MoviePage(props: MoviePageProps) : RComponent<MoviePageProps, MoviePageSta
 
     override fun RBuilder.render() {
         if (state.movieDetails != null) {
+            val title = state.movieDetails?.title ?: ""
+            val year = state.movieDetails?.year ?: ""
             div {
-                +"${JSON.stringify(state.movieDetails)}"
+                title(title, year)
+                +JSON.stringify(state.movieDetails)
             }
         } else {
             div {}

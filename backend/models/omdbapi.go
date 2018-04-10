@@ -1,5 +1,12 @@
 package models
 
+import (
+	"encoding/json"
+	"reflect"
+
+	"github.com/malaman/movie-search-app/backend/utils"
+)
+
 // omdbapi does not allow to specify custom limit per page
 const OMDB_ITEMS_PER_PAGE = 10
 
@@ -25,6 +32,17 @@ type OMDBSearchQueryParams struct {
 type MovieRating struct {
 	Source string `json:"Source"`
 	Value  string `json:"Value"`
+}
+
+func (movieRating *MovieRating) MarshalJSON() ([]byte, error) {
+	result := map[string]interface{}{}
+	v := reflect.ValueOf(movieRating).Elem()
+	for i := 0; i < v.NumField(); i++ {
+		typeField := v.Type().Field(i)
+		fieldName := utils.PascalCaseToCamelCase(typeField.Name)
+		result[fieldName] = v.Field(i).Interface()
+	}
+	return json.Marshal(result)
 }
 
 type OMDBMovieDetails struct {

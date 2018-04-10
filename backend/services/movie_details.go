@@ -10,8 +10,8 @@ import (
 	"github.com/malaman/movie-search-app/backend/utils"
 )
 
-func getMovieDetailsFromBytes(bytes *[]byte) (*models.OMDBMovieDetails, error) {
-	movieDetails := models.OMDBMovieDetails{}
+func getMovieDetailsFromBytes(bytes *[]byte) (*models.MovieDetails, error) {
+	movieDetails := models.MovieDetails{}
 	if err := json.Unmarshal(*bytes, &movieDetails); err != nil {
 		return &movieDetails, err
 	}
