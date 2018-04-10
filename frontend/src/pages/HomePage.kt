@@ -9,6 +9,7 @@ import models.SearchResponse
 import models.SearchResponseItem
 import components.*
 import kotlin.browser.window
+import utils.Config
 
 interface HomePageState : RState {
     var options: Array<Option>
@@ -18,7 +19,6 @@ interface HomePageState : RState {
 class HomePage : RComponent<RProps, HomePageState >() {
 
     companion object {
-        const val HOST = "http://localhost:9000"
         /**
          * Prepares array of options for react select
          *
@@ -49,7 +49,7 @@ class HomePage : RComponent<RProps, HomePageState >() {
 
     private fun loadMovies(searchString: String) {
         val config: AxiosConfigSettings = jsObject {
-            url = "$HOST/search?s=$searchString"
+            url = "${Config.HOST}/search?s=$searchString"
             timeout = 3000
         }
         axios<SearchResponse>(config).then { response ->
